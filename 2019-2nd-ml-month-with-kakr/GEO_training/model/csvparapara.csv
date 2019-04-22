@@ -1,0 +1,55 @@
+,Tdate,Ttime,runtime,score,zmodel_name,zmodel_para
+0,2019-03-16,13:33,6.561208725,13456819829.0,GradientBoostingRegressor,"<bound method BaseEstimator.get_params of GradientBoostingRegressor(alpha=0.9, criterion='friedman_mse', init=None,
+             learning_rate=0.1, loss='ls', max_depth=5, max_features=None,
+             max_leaf_nodes=None, min_impurity_decrease=0.0,
+             min_impurity_split=None, min_samples_leaf=1,
+             min_samples_split=2, min_weight_fraction_leaf=0.0,
+             n_estimators=400, n_iter_no_change=None, presort='auto',
+             random_state=14, subsample=1.0, tol=0.0001,
+             validation_fraction=0.1, verbose=0, warm_start=False)>"
+1,2019/3/16,13:43,6.668608665466309,11311795944.875168,GradientBoostingRegressor,
+2,2019/3/16,13:46,6.456066131591798,16071254779.379025,GradientBoostingRegressor,
+3,2019/3/16,13:50,6.453073024749756,20092177209.7188,GradientBoostingRegressor,
+4,2019/3/16,13:50,6.486205339431763,16524077455.909819,GradientBoostingRegressor,
+5,2019/3/16,13:51,6.6823599338531485,14471975420.74446,GradientBoostingRegressor,
+6,2019/3/16,13:52,6.941598176956178,14254425052.572325,GradientBoostingRegressor,
+7,2019/3/16,13:54,6.489108324050902,12040927203.47689,GradientBoostingRegressor,"<bound method BaseEstimator.get_params of GradientBoostingRegressor(alpha=0.9, criterion='friedman_mse', init=None,
+             learning_rate=0.1, loss='ls', max_depth=5, max_features=None,
+             max_leaf_nodes=None, min_impurity_decrease=0.0,
+             min_impurity_split=None, min_samples_leaf=1,
+             min_samples_split=2, min_weight_fraction_leaf=0.0,
+             n_estimators=400, n_iter_no_change=None, presort='auto',
+             random_state=14, subsample=1.0, tol=0.0001,
+             validation_fraction=0.1, verbose=0, warm_start=False)>"
+8,2019/3/16,5:18,8.327337503433228,13056411614.625244,GradientBoostingRegressor,"<bound method BaseEstimator.get_params of GradientBoostingRegressor(alpha=0.9, criterion='friedman_mse', init=None,
+             learning_rate=0.1, loss='ls', max_depth=5, max_features=None,
+             max_leaf_nodes=None, min_impurity_decrease=0.0,
+             min_impurity_split=None, min_samples_leaf=1,
+             min_samples_split=2, min_weight_fraction_leaf=0.0,
+             n_estimators=400, n_iter_no_change=None, presort='auto',
+             random_state=14, subsample=1.0, tol=0.0001,
+             validation_fraction=0.1, verbose=0, warm_start=False)>"
+9,2019/3/16,5:52,8.734843730926514,18757552910.398098,GradientBoostingRegressor,"<bound method BaseEstimator.get_params of GradientBoostingRegressor(alpha=0.9, criterion='friedman_mse', init=None,
+             learning_rate=0.1, loss='ls', max_depth=5, max_features=None,
+             max_leaf_nodes=None, min_impurity_decrease=0.0,
+             min_impurity_split=None, min_samples_leaf=1,
+             min_samples_split=2, min_weight_fraction_leaf=0.0,
+             n_estimators=400, n_iter_no_change=None, presort='auto',
+             random_state=14, subsample=1.0, tol=0.0001,
+             validation_fraction=0.1, verbose=0, warm_start=False)>"
+10,2019/3/16,15:2,16.472059965133667,14774773765.62406,GradientBoostingRegressor,"<bound method BaseEstimator.get_params of GradientBoostingRegressor(alpha=0.9, criterion='friedman_mse', init=None,
+             learning_rate=0.1, loss='ls', max_depth=5, max_features=None,
+             max_leaf_nodes=None, min_impurity_decrease=0.0,
+             min_impurity_split=None, min_samples_leaf=1,
+             min_samples_split=2, min_weight_fraction_leaf=0.0,
+             n_estimators=400, n_iter_no_change=None, presort='auto',
+             random_state=14, subsample=1.0, tol=0.0001,
+             validation_fraction=0.1, verbose=0, warm_start=False)>"
+11,2019/3/20,9:23,8.67278265953064,13602517089.740286,GradientBoostingRegressor,"<bound method BaseEstimator.get_params of GradientBoostingRegressor(alpha=0.9, criterion='friedman_mse', init=None,
+             learning_rate=0.1, loss='ls', max_depth=5, max_features=None,
+             max_leaf_nodes=None, min_impurity_decrease=0.0,
+             min_impurity_split=None, min_samples_leaf=1,
+             min_samples_split=2, min_weight_fraction_leaf=0.0,
+             n_estimators=400, n_iter_no_change=None, presort='auto',
+             random_state=14, subsample=1.0, tol=0.0001,
+             validation_fraction=0.1, verbose=0, warm_start=False)>"

@@ -1,0 +1,57 @@
+Average CV-Score:  117695.12060685575
+
+StartTime:  2019-04-23 06:22:55.248895
+9997
+EndTime:  2019-04-23 06:23:15.254888
+TotalTime:  20.005993604660034
+
+
+Average CV-Score:  117432.46236203599
+
+StartTime:  2019-04-23 06:27:12.659238
+2043
+EndTime:  2019-04-23 06:27:17.427194
+TotalTime:  4.767955780029297
+
+
+!! 
+
+Average CV-Score:  116142.38605729202
+
+StartTime:  2019-04-23 06:34:16.830288
+EndTime:  2019-04-23 06:34:19.860073
+TotalTime:  3.029784917831421
+
+Average CV-Score:  115810.5706435196
+
+Average CV-Score:  116424.05756250108
+
+
+
+xgb
+* geo
+    * Average CV-Score:  117589.96702105377
+* pca1
+    * Average CV-Score:  116420.4624255128
+* pca2
+    * Average CV-Score:  114799.14454368448
+* skewed
+    * Average CV-Score:  115477.93455632674 pass
+* normalizing
+    * Average CV-Score:  182004.722611946 pass
+이건 다시 확인
+Average CV-Score:  142833.68626432418
+
+
+xgb
+* geo
+* pca4
+s
+
+Average CV-Score:  111412.25640145992
+
+
+
+
+lgb
+Average CV-Score:  115003.96471292987
