@@ -1,0 +1,177 @@
+import warnings
+warnings.filterwarnings("ignore")
+
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+import os
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import seaborn as sns
+
+from time import localtime
+import time
+from datetime import datetime, timedelta,date
+import gc
+
+from sklearn.decomposition import PCA
+import xgboost as xgb
+from sklearn.model_selection import KFold 
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import cross_val_score
+from functools import wraps
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def get_oof(clf, x_train, y_train, x_test, eval_func, **kwargs):
+    nfolds = kwargs.get('NFOLDS', 5)
+    kfold_shuffle = kwargs.get('kfold_shuffle', True)
+    kfold_random_state = kwargs.get('kfold_random_state', 0)
+    stratified_kfold_ytrain = kwargs.get('stratifed_kfold_y_value', None)
+    ntrain = x_train.shape[0]
+    ntest = x_test.shape[0]
+    
+    kf_split = None
+    if stratified_kfold_ytrain is None:
+        kf = KFold(n_splits=nfolds, shuffle=kfold_shuffle, random_state=kfold_random_state)
+        kf_split = kf.split(x_train)
+    else:
+        kf = StratifiedKFold(n_splits=nfolds, shuffle=kfold_shuffle, random_state=kfold_random_state)
+        kf_split = kf.split(x_train, stratified_kfold_ytrain)
+        
+    oof_train = np.zeros((ntrain,))
+    oof_test = np.zeros((ntest,))
+
+    cv_sum = 0
+    
+    # before running model, print model param
+    # lightgbm model and xgboost model use get_params()
+    try:
+        if clf.clf is not None:
+            print(clf.clf)
+    except:
+        print(clf)
+        print(clf.get_params())
+
+    for i, (train_index, cross_index) in enumerate(kf_split):
+        x_tr, x_cr = None, None
+        y_tr, y_cr = None, None
+        if isinstance(x_train, pd.DataFrame):
+            x_tr, x_cr = x_train.iloc[train_index], x_train.iloc[cross_index]
+            y_tr, y_cr = y_train.iloc[train_index], y_train.iloc[cross_index]
+        else:
+            x_tr, x_cr = x_train[train_index], x_train[cross_index]
+            y_tr, y_cr = y_train[train_index], y_train[cross_index]
+
+        clf.train(x_tr, y_tr, x_cr, y_cr)
+        
+        oof_train[cross_index] = clf.predict(x_cr)
+
+        cv_score = eval_func(y_cr, oof_train[cross_index])
+        
+        print('Fold %d / ' % (i+1), 'CV-Score: %.6f' % cv_score)
+        cv_sum = cv_sum + cv_score
+        
+        del x_tr, x_cr, y_tr, y_cr
+        
+    gc.collect()
+    
+    score = cv_sum / nfolds
+    print("Average CV-Score: ", score)
+
+    # Using All Dataset, retrain
+    clf.train(x_train, y_train)
+    oof_test = clf.predict(x_test)
+
+    return oof_train.reshape(-1, 1), oof_test.reshape(-1, 1), score
+
+
+def time_decorator(func): 
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print("\nStartTime: ", datetime.now() + timedelta(hours=9))
+        start_time = time.time()
+        
+        df = func(*args, **kwargs)
+        
+        print("EndTime: ", datetime.now() + timedelta(hours=9))  
+        print("TotalTime: ", time.time() - start_time)
+        return df
+        
+    return wrapper
+
+
+
+class XgbWrapper(object):
+    def __init__(self, params=None, **kwargs):
+        self.param = params
+        self.param['seed'] = kwargs.get('seed', RANDOM_SEED)
+        self.num_rounds = kwargs.get('num_rounds', 1000)
+        self.early_stopping = kwargs.get('ealry_stopping', 100)
+
+        self.eval_function = kwargs.get('eval_function', None)
+        self.verbose_eval = kwargs.get('verbose_eval', 100)
+        self.best_round = 0
+    
+    @time_decorator
+    def train(self, x_train, y_train, x_cross=None, y_cross=None):
+        need_cross_validation = True
+       
+        if isinstance(y_train, pd.DataFrame) is True:
+            y_train = y_train[y_train.columns[0]]
+            if y_cross is not None:
+                y_cross = y_cross[y_cross.columns[0]]
+
+        if x_cross is None:
+            dtrain = xgb.DMatrix(x_train, label=y_train, silent= True)
+            train_round = self.best_round
+            if self.best_round == 0:
+                train_round = self.num_rounds
+            
+            print(train_round)
+            self.clf = xgb.train(self.param, dtrain, train_round)
+            del dtrain
+        else:
+            dtrain = xgb.DMatrix(x_train, label=y_train, silent=True)
+            dvalid = xgb.DMatrix(x_cross, label=y_cross, silent=True)
+            watchlist = [(dtrain, 'train'), (dvalid, 'eval')]
+
+            self.clf = xgb.train(self.param, dtrain, self.num_rounds, watchlist, feval=self.eval_function,
+                                 early_stopping_rounds=self.early_stopping,
+                                 verbose_eval=self.verbose_eval)
+            self.best_round = max(self.best_round, self.clf.best_iteration)
+
+    def predict(self, x):
+        return self.clf.predict(xgb.DMatrix(x), ntree_limit=self.best_round)
+
+    def get_params(self):
+        return self.param    
+    
+def rmse(y_true, y_pred):
+    return np.sqrt(mean_squared_error(np.expm1(y_true), np.expm1(y_pred)))
+
+
+
+
+
+
+
+
+
+train_columns = list(x_train.columns)
+xgb_model = XgbWrapper(params=xgb_params_add1, num_rounds = 20000, ealry_stopping=500, verbose_eval=300)
+
+xgb_train, xgb_test, xgb_cv_score = get_oof(xgb_model, x_train[train_columns], y_train, x_test[train_columns], 
+                            rmse, NFOLDS=5, kfold_random_state=RANDOM_SEED)
+
